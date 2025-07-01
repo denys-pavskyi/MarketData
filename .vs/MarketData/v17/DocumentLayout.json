@@ -1,7 +1,24 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\denpa\\OneDrive\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\Test_project_Magnise\\MarketData\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D7C7D1F6-634A-49E8-94DF-DBA314BE266C}|MarketData.BLL\\MarketData.BLL.csproj|c:\\users\\denpa\\onedrive\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\test_project_magnise\\marketdata\\marketdata.bll\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D7C7D1F6-634A-49E8-94DF-DBA314BE266C}|MarketData.BLL\\MarketData.BLL.csproj|solutionrelative:marketdata.bll\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EC2BC91F-7186-4CE2-AD72-4B56A2120871}|MarketData.DAL\\MarketData.DAL.csproj|c:\\users\\denpa\\onedrive\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\test_project_magnise\\marketdata\\marketdata.dal\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EC2BC91F-7186-4CE2-AD72-4B56A2120871}|MarketData.DAL\\MarketData.DAL.csproj|solutionrelative:marketdata.dal\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A0F587C-B2A2-4FCA-A2F7-179170B70B75}|MarketData.API\\MarketData.API.csproj|c:\\users\\denpa\\onedrive\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\test_project_magnise\\marketdata\\marketdata.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{4A0F587C-B2A2-4FCA-A2F7-179170B70B75}|MarketData.API\\MarketData.API.csproj|solutionrelative:marketdata.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A0F587C-B2A2-4FCA-A2F7-179170B70B75}|MarketData.API\\MarketData.API.csproj|c:\\users\\denpa\\onedrive\\\u0440\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\test_project_magnise\\marketdata\\marketdata.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4A0F587C-B2A2-4FCA-A2F7-179170B70B75}|MarketData.API\\MarketData.API.csproj|solutionrelative:marketdata.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +26,63 @@
       "DocumentGroups": [
         {
           "DockedWidth": 469,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "C:\\Users\\denpa\\OneDrive\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\Test_project_Magnise\\MarketData\\MarketData.BLL\\Class1.cs",
+              "RelativeDocumentMoniker": "MarketData.BLL\\Class1.cs",
+              "ToolTip": "C:\\Users\\denpa\\OneDrive\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\Test_project_Magnise\\MarketData\\MarketData.BLL\\Class1.cs",
+              "RelativeToolTip": "MarketData.BLL\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-01T19:57:14.861Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "C:\\Users\\denpa\\OneDrive\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\Test_project_Magnise\\MarketData\\MarketData.DAL\\Class1.cs",
+              "RelativeDocumentMoniker": "MarketData.DAL\\Class1.cs",
+              "ToolTip": "C:\\Users\\denpa\\OneDrive\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\Test_project_Magnise\\MarketData\\MarketData.DAL\\Class1.cs",
+              "RelativeToolTip": "MarketData.DAL\\Class1.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-01T19:56:16.106Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\denpa\\OneDrive\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\Test_project_Magnise\\MarketData\\MarketData.API\\appsettings.json",
+              "RelativeDocumentMoniker": "MarketData.API\\appsettings.json",
+              "ToolTip": "C:\\Users\\denpa\\OneDrive\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\Test_project_Magnise\\MarketData\\MarketData.API\\appsettings.json",
+              "RelativeToolTip": "MarketData.API\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAABBAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-01T19:52:52.427Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\denpa\\OneDrive\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\Test_project_Magnise\\MarketData\\MarketData.API\\Program.cs",
+              "RelativeDocumentMoniker": "MarketData.API\\Program.cs",
+              "ToolTip": "C:\\Users\\denpa\\OneDrive\\\u0420\u0430\u0431\u043E\u0447\u0438\u0439 \u0441\u0442\u043E\u043B\\Test_project_Magnise\\MarketData\\MarketData.API\\Program.cs",
+              "RelativeToolTip": "MarketData.API\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-01T19:28:27.169Z",
+              "EditorCaption": ""
             }
           ]
         },

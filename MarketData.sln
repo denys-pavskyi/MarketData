@@ -5,6 +5,10 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketData.API", "MarketData.API\MarketData.API.csproj", "{4A0F587C-B2A2-4FCA-A2F7-179170B70B75}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketData.DAL", "MarketData.DAL\MarketData.DAL.csproj", "{EC2BC91F-7186-4CE2-AD72-4B56A2120871}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketData.BLL", "MarketData.BLL\MarketData.BLL.csproj", "{D7C7D1F6-634A-49E8-94DF-DBA314BE266C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{4A0F587C-B2A2-4FCA-A2F7-179170B70B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A0F587C-B2A2-4FCA-A2F7-179170B70B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A0F587C-B2A2-4FCA-A2F7-179170B70B75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC2BC91F-7186-4CE2-AD72-4B56A2120871}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC2BC91F-7186-4CE2-AD72-4B56A2120871}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC2BC91F-7186-4CE2-AD72-4B56A2120871}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC2BC91F-7186-4CE2-AD72-4B56A2120871}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7C7D1F6-634A-49E8-94DF-DBA314BE266C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7C7D1F6-634A-49E8-94DF-DBA314BE266C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7C7D1F6-634A-49E8-94DF-DBA314BE266C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7C7D1F6-634A-49E8-94DF-DBA314BE266C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
