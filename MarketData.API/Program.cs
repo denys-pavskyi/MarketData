@@ -1,4 +1,8 @@
 
+using MarketData.BLL.Other;
+using MarketData.DAL.Configurations;
+using Microsoft.EntityFrameworkCore;
+
 namespace MarketData.API
 {
     public class Program
@@ -12,7 +16,25 @@ namespace MarketData.API
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+
+            // Db connection
+            builder.Services.AddDbContext<AppDbContext>(opt =>
+            {
+                opt.UseNpgsql(builder.Configuration["ConnectionStrings:RegistrationConnection"]);
+                opt.EnableSensitiveDataLogging();
+            });
+
+
+            builder.Services.Configure<FintachartsSettings>(
+                builder.Configuration.GetSection("Fintacharts"));
+
+
+
             builder.Services.AddSwaggerGen();
+
+
+
+
 
             var app = builder.Build();
 
