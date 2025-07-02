@@ -1,6 +1,8 @@
 
 using AutoMapper;
+using MarketData.BLL.Interfaces;
 using MarketData.BLL.Models.Other;
+using MarketData.BLL.Services;
 using MarketData.DAL.Configurations;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,7 +39,8 @@ namespace MarketData.API
 
             builder.Services.AddSwaggerGen();
 
-
+            // Services
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
 
 
