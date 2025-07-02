@@ -58,7 +58,7 @@ public class AuthService: IAuthService
         };
 
         var content = new FormUrlEncodedContent(formData);
-        var tokenUrl = $"{_settings.ApiUri}/identity/realms/fintatech/protocol/openid-connect/token";
+        var tokenUrl = $"/identity/realms/fintatech/protocol/openid-connect/token";
 
         var response = await _httpClient.PostAsync(tokenUrl, content);
 
@@ -109,7 +109,7 @@ public class AuthService: IAuthService
         };
 
         var content = new FormUrlEncodedContent(formData);
-        var tokenUrl = $"{_settings.ApiUri}/identity/realms/fintatech/protocol/openid-connect/token";
+        var tokenUrl = $"/identity/realms/fintatech/protocol/openid-connect/token";
 
         try
         {

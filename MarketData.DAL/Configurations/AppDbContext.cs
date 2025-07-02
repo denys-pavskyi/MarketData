@@ -8,6 +8,7 @@ public class AppDbContext : DbContext
 
     public DbSet<Asset> Assets { get; set; }
     public DbSet<AssetMapping> AssetMappings { get; set; }
+    public DbSet<AssetSyncMetadata> AssetSyncMetadata { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {

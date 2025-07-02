@@ -1,10 +1,12 @@
 
 using AutoMapper;
+using MarketData.API.Configurations;
 using MarketData.BLL.Interfaces;
 using MarketData.BLL.Models.Other;
 using MarketData.BLL.Services;
 using MarketData.DAL.Configurations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace MarketData.API
 {
@@ -38,6 +40,14 @@ namespace MarketData.API
             builder.Services.AddSingleton(mapper);
 
             builder.Services.AddSwaggerGen();
+
+            // HttpClient
+            builder.Services.AddHttpClient("ApiClient", (sp, client) =>
+            {
+                var apiSettings = sp.GetRequiredService<IOptions<ApiSettings>>().Value;
+                client.BaseAddress = new Uri(apiSettings.BaseUrl);
+            });
+
 
             // Services
             builder.Services.AddScoped<IAuthService, AuthService>();
