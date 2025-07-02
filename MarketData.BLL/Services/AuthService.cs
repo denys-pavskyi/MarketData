@@ -29,13 +29,22 @@ public class AuthService: IAuthService
             return Result<string>.Success(_accessToken);
         }
 
-        var authResult = await AuthenticateAsync();
-        if (!authResult.IsSuccess)
+        if (!string.IsNullOrWhiteSpace(_refreshToken))
         {
-            return Result<string>.Failure(authResult.Error!);
+            var refreshResult = await RefreshAccessTokenAsync();
+            if (refreshResult.IsSuccess)
+            {
+                return Result<string>.Success(_accessToken);
+            }
         }
 
-        return Result<string>.Success(_accessToken);
+        var authResult = await AuthenticateAsync();
+        if (authResult.IsSuccess)
+        {
+            return Result<string>.Success(_accessToken);
+        }
+
+        return Result<string>.Failure(authResult.Error!);
     }
 
     private async Task<Result> AuthenticateAsync()
@@ -80,5 +89,65 @@ public class AuthService: IAuthService
         return Result.Success();
     }
 
+
+    private async Task<Result> RefreshAccessTokenAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_refreshToken))
+        {
+            return Result.Failure(new ErrorResponse
+            {
+                HttpCode = HttpStatusCode.Unauthorized,
+                Message = "Refresh token is missing"
+            });
+        }
+
+        var formData = new Dictionary<string, string>
+        {
+            { "grant_type", "refresh_token" },
+            { "client_id", "app-cli" },
+            { "refresh_token", _refreshToken }
+        };
+
+        var content = new FormUrlEncodedContent(formData);
+        var tokenUrl = $"{_settings.ApiUri}/identity/realms/fintatech/protocol/openid-connect/token";
+
+        try
+        {
+            var response = await _httpClient.PostAsync(tokenUrl, content);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return Result.Failure(new ErrorResponse
+                {
+                    HttpCode = HttpStatusCode.Unauthorized,
+                    Message = "Refresh token expired or invalid"
+                });
+            }
+
+            var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
+            if (result == null || string.IsNullOrWhiteSpace(result.AccessToken))
+            {
+                return Result.Failure(new ErrorResponse
+                {
+                    HttpCode = HttpStatusCode.InternalServerError,
+                    Message = "Failed to parse refresh token response"
+                });
+            }
+
+            _accessToken = result.AccessToken;
+            _refreshToken = result.RefreshToken;
+            _tokenExpiresAt = DateTime.UtcNow.AddSeconds(result.ExpiresIn - 60);
+
+            return Result.Success();
+        }
+        catch (Exception ex)
+        {
+            return Result.Failure(new ErrorResponse
+            {
+                HttpCode = HttpStatusCode.InternalServerError,
+                Message = $"Exception during token refresh: {ex.Message}"
+            });
+        }
+    }
 
 }
