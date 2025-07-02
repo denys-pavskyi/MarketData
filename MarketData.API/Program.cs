@@ -51,7 +51,7 @@ namespace MarketData.API
 
             // Services
             builder.Services.AddScoped<IAuthService, AuthService>();
-
+            builder.Services.AddScoped<IAssetService, AssetService>();
 
 
             var app = builder.Build();
