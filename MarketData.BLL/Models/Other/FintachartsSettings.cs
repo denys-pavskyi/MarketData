@@ -1,4 +1,4 @@
-﻿namespace MarketData.BLL.Other;
+﻿namespace MarketData.BLL.Models.Other;
 
 public class FintachartsSettings
 {

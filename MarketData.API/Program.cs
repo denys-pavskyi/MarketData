@@ -1,5 +1,6 @@
 
-using MarketData.BLL.Other;
+using AutoMapper;
+using MarketData.BLL.Models.Other;
 using MarketData.DAL.Configurations;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +21,7 @@ namespace MarketData.API
             // Db connection
             builder.Services.AddDbContext<AppDbContext>(opt =>
             {
-                opt.UseNpgsql(builder.Configuration["ConnectionStrings:RegistrationConnection"]);
+                opt.UseNpgsql(builder.Configuration["ConnectionStrings:MarketDataDB"]);
                 opt.EnableSensitiveDataLogging();
             });
 
@@ -28,7 +29,11 @@ namespace MarketData.API
             builder.Services.Configure<FintachartsSettings>(
                 builder.Configuration.GetSection("Fintacharts"));
 
+            //mapper config
+            var mapperConfig = new MapperConfiguration(mc => { mc.AddProfile(new MapperProfile()); });
 
+            var mapper = mapperConfig.CreateMapper();
+            builder.Services.AddSingleton(mapper);
 
             builder.Services.AddSwaggerGen();
 
