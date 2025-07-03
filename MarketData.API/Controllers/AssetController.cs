@@ -1,4 +1,5 @@
 ﻿using MarketData.BLL.Interfaces;
+using MarketData.BLL.Models.Responses;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,15 +20,27 @@ namespace MarketData.API.Controllers
         }
 
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetAssets()
-        //{
+        [HttpGet]
+        public async Task<IActionResult> GetAssets()
+        {
+            var tokenResult = await _authService.GetAccessTokenAsync();
 
-        //   var assets = _assetService.
+            if (!tokenResult.IsSuccess)
+            {
+                return tokenResult.Error!.ToActionResult();
+            }
+
+            var accessToken = tokenResult.Value!;
+
+            // Далі логіка роботи з сервісом отримання активів
+            // var assets = await _assetService.GetAssetsAsync(accessToken);
+            // return Ok(assets);
+
+            return Ok();
 
 
 
-        //}
+        }
 
 
     }

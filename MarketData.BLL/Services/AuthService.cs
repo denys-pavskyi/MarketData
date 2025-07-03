@@ -4,6 +4,7 @@ using MarketData.BLL.Models.Other;
 using MarketData.BLL.Models.Responses;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
+using System.Net.Http;
 
 namespace MarketData.BLL.Services;
 
@@ -15,10 +16,11 @@ public class AuthService: IAuthService
     private string _accessToken;
     private string _refreshToken;
     private DateTime _tokenExpiresAt;
+    private DateTime _refreshTokenExpiresAt;
 
-    public AuthService(HttpClient httpClient, IOptions<FintachartsSettings> options)
+    public AuthService(IHttpClientFactory httpClientFactory, IOptions<FintachartsSettings> options)
     {
-        _httpClient = httpClient;
+        _httpClient = httpClientFactory.CreateClient("ApiClient"); ;
         _settings = options.Value;
     }
 
@@ -29,7 +31,7 @@ public class AuthService: IAuthService
             return Result<string>.Success(_accessToken);
         }
 
-        if (!string.IsNullOrWhiteSpace(_refreshToken))
+        if (!string.IsNullOrWhiteSpace(_refreshToken) && DateTime.UtcNow < _refreshTokenExpiresAt)
         {
             var refreshResult = await RefreshAccessTokenAsync();
             if (refreshResult.IsSuccess)
@@ -84,7 +86,10 @@ public class AuthService: IAuthService
 
         _accessToken = result.AccessToken;
         _refreshToken = result.RefreshToken;
+
+
         _tokenExpiresAt = DateTime.UtcNow.AddSeconds(result.ExpiresIn - 60);
+        _refreshTokenExpiresAt = DateTime.UtcNow.AddSeconds(result.RefreshExpiresIn - 60);
 
         return Result.Success();
     }
@@ -136,7 +141,9 @@ public class AuthService: IAuthService
 
             _accessToken = result.AccessToken;
             _refreshToken = result.RefreshToken;
+
             _tokenExpiresAt = DateTime.UtcNow.AddSeconds(result.ExpiresIn - 60);
+            _refreshTokenExpiresAt = DateTime.UtcNow.AddSeconds(result.RefreshExpiresIn - 60);
 
             return Result.Success();
         }

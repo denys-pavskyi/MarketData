@@ -12,4 +12,7 @@ public class AuthResponse
 
     [JsonPropertyName("refresh_token")]
     public string RefreshToken { get; set; }
+
+    [JsonPropertyName("refresh_expires_in")]
+    public int RefreshExpiresIn { get; set; }
 }

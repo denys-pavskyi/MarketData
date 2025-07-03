@@ -1,6 +1,5 @@
 
 using AutoMapper;
-using MarketData.API.Configurations;
 using MarketData.BLL.Interfaces;
 using MarketData.BLL.Models.Other;
 using MarketData.BLL.Services;
@@ -46,8 +45,8 @@ namespace MarketData.API
             // HttpClient
             builder.Services.AddHttpClient("ApiClient", (sp, client) =>
             {
-                var apiSettings = sp.GetRequiredService<IOptions<ApiSettings>>().Value;
-                client.BaseAddress = new Uri(apiSettings.BaseUrl);
+                var baseUrl = builder.Configuration["Fintacharts:ApiUri"];
+                client.BaseAddress = new Uri(baseUrl);
             });
 
             // Repositories
@@ -55,7 +54,7 @@ namespace MarketData.API
             builder.Services.AddScoped<IAssetSyncMetadataRepository, AssetSyncMetadataRepository>();
 
             // Services
-            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddScoped<IAssetService, AssetService>();
 
 
