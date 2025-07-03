@@ -5,6 +5,8 @@ using MarketData.BLL.Interfaces;
 using MarketData.BLL.Models.Other;
 using MarketData.BLL.Services;
 using MarketData.DAL.Configurations;
+using MarketData.DAL.Interfaces;
+using MarketData.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -48,6 +50,9 @@ namespace MarketData.API
                 client.BaseAddress = new Uri(apiSettings.BaseUrl);
             });
 
+            // Repositories
+            builder.Services.AddScoped<IAssetRepository, AssetRepository>();
+            builder.Services.AddScoped<IAssetSyncMetadataRepository, AssetSyncMetadataRepository>();
 
             // Services
             builder.Services.AddScoped<IAuthService, AuthService>();
