@@ -14,8 +14,4 @@
     <ProjectReference Include="..\MarketData.BLL\MarketData.BLL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>

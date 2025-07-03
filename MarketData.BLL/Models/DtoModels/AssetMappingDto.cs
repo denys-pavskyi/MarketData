@@ -1,17 +1,22 @@
 ﻿using MarketData.DAL.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace MarketData.BLL.Models.DtoModels;
 
 public class AssetMappingDto
 {
-    public Guid Id { get; set; }
-    public string Provider { get; set; } = string.Empty;
+    [JsonPropertyName("symbol")]
+    public string Symbol { get; set; } = string.Empty;
 
-    public string ProviderSymbol { get; set; } = string.Empty;
+    [JsonPropertyName("exchange")]
+    public string? Exchange { get; set; }
 
-    public string Exchange { get; set; } = string.Empty;
-    public Guid AssetId { get; set; }
+    [JsonPropertyName("defaultOrderSize")]
+    public int? DefaultOrderSize { get; set; }
+
+    [JsonPropertyName("maxOrderSize")]
+    public int? MaxOrderSize { get; set; }
 
 }
