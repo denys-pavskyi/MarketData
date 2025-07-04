@@ -5,5 +5,7 @@ namespace MarketData.BLL.Interfaces;
 
 public interface IAssetService
 {
-    Task<Result<List<AssetDto>>> GetAssetsAsync(string accessToken);
+    Task<Result<List<AssetDto>>> GetAssetsFromApiAsync(string accessToken);
+    Task<Result<bool>> SyncAssetsAsync(string accessToken);
+
 }

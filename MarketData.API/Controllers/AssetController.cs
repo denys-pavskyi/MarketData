@@ -33,10 +33,32 @@ namespace MarketData.API.Controllers
 
             var accessToken = tokenResult.Value!;
 
-            var assetsResult = await _assetService.GetAssetsAsync(accessToken);
+            var assetsResult = await _assetService.GetAssetsFromApiAsync(accessToken);
 
             return assetsResult.Match(
                 Ok,
+                error => error.ToActionResult());
+
+        }
+
+
+
+        [HttpPost("sync")]
+        public async Task<IActionResult> SyncAssets()
+        {
+            var tokenResult = await _authService.GetAccessTokenAsync();
+
+            if (!tokenResult.IsSuccess)
+            {
+                return tokenResult.Error!.ToActionResult();
+            }
+
+            var accessToken = tokenResult.Value!;
+
+            var result = await _assetService.SyncAssetsAsync(accessToken);
+
+            return result.Match(
+                _ => NoContent(),
                 error => error.ToActionResult());
 
         }
