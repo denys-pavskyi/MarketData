@@ -28,9 +28,36 @@ public class AssetRepository: IAssetRepository
         await _context.SaveChangesAsync();
     }
 
+    public async Task AddAsync(Asset asset)
+    {
+        _context.Assets.Add(asset);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task DeleteAsync(Asset asset)
     {
         _context.Assets.Remove(asset);
+        await _context.SaveChangesAsync();
+    }
+
+
+    // Asset mapping
+
+    public async Task AddMappingAsync(AssetMapping mapping)
+    {
+        _context.AssetMappings.Add(mapping);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateMappingAsync(AssetMapping mapping)
+    {
+        _context.AssetMappings.Update(mapping);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteMappingAsync(AssetMapping mapping)
+    {
+        _context.AssetMappings.Remove(mapping);
         await _context.SaveChangesAsync();
     }
 
