@@ -18,16 +18,18 @@ public class AssetDto
     [JsonPropertyName("description")]
     public string Description { get; set; } = string.Empty;
 
+    [JsonPropertyName("exchange")]
+    public string Exchange { get; set; } = string.Empty;
+
+
     [JsonPropertyName("tickSize")]
     public decimal TickSize { get; set; }
 
     [JsonPropertyName("currency")]
     public string Currency { get; set; } = string.Empty;
 
-    [JsonPropertyName("baseCurrency")]
-    public string? BaseCurrency { get; set; }
-
     [JsonPropertyName("mappings")]
-    public Dictionary<string, AssetMappingDto> Mappings { get; set; } = new();
+    [JsonConverter(typeof(AssetMappingConverter))]
+    public List<AssetMappingDto> Mappings { get; set; } = new();
 
 }

@@ -11,6 +11,12 @@ public class Asset
     [MaxLength(50)]
     public string Symbol { get; set; } = string.Empty;
 
+    [MaxLength(50)]
+    public string Exchange { get; set; } = string.Empty;
+
+    [MaxLength(255)]
+    public string Description { get; set; } = string.Empty;
+
     [Required]
     [MaxLength(20)]
     public string Kind { get; set; } = string.Empty;

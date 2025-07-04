@@ -20,7 +20,7 @@ public class AuthService: IAuthService
 
     public AuthService(IHttpClientFactory httpClientFactory, IOptions<FintachartsSettings> options)
     {
-        _httpClient = httpClientFactory.CreateClient("ApiClient"); ;
+        _httpClient = httpClientFactory.CreateClient("ApiClient");
         _settings = options.Value;
     }
 
