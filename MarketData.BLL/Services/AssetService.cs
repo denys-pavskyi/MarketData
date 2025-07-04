@@ -15,16 +15,14 @@ public class AssetService: IAssetService
 {
     private readonly HttpClient _httpClient;
     private readonly IAssetRepository _assetRepository;
-    private readonly IAssetSyncMetadataRepository _metadataRepository;
     private readonly IMapper _mapper;
 
 
     public AssetService(IAssetRepository assetRepository, 
-        IAssetSyncMetadataRepository metadataRepository, IMapper mapper,
+        IMapper mapper,
         IHttpClientFactory httpClientFactory)
     {
         _assetRepository = assetRepository;
-        _metadataRepository = metadataRepository;
         _mapper = mapper;
         _httpClient = httpClientFactory.CreateClient("ApiClient");
     }

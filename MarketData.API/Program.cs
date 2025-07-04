@@ -51,7 +51,7 @@ namespace MarketData.API
 
             // Repositories
             builder.Services.AddScoped<IAssetRepository, AssetRepository>();
-            builder.Services.AddScoped<IAssetSyncMetadataRepository, AssetSyncMetadataRepository>();
+            
 
             // Services
             builder.Services.AddSingleton<IAuthService, AuthService>();
