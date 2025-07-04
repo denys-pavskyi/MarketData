@@ -21,9 +21,19 @@ namespace MarketData.API.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("")]
         public async Task<IActionResult> GetAssets()
         {
+            // Db contain assets
+            var assets = await _assetService.GetAssets();
+
+            if (assets.Count > 0)
+            {
+                return Ok(assets);
+            }
+
+
+            // Assets was not found in db, syncing them from API
             var tokenResult = await _authService.GetAccessTokenAsync();
 
             if (!tokenResult.IsSuccess)
@@ -33,7 +43,7 @@ namespace MarketData.API.Controllers
 
             var accessToken = tokenResult.Value!;
 
-            var assetsResult = await _assetService.GetAssetsFromApiAsync(accessToken);
+            var assetsResult = await _assetService.SyncAssetsAsync(accessToken);
 
             return assetsResult.Match(
                 Ok,

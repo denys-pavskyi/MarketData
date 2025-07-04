@@ -76,15 +76,23 @@ public class AssetService: IAssetService
         return Result<List<AssetDto>>.Success(allAssets);
     }
 
+    public async Task<List<AssetDto>> GetAssets()
+    {
+        var assetsFromDb = await _assetRepository.GetAllAsync();
+        var assetDtos = _mapper.Map<List<AssetDto>>(assetsFromDb);
 
-    public async Task<Result<bool>> SyncAssetsAsync(string accessToken)
+        return assetDtos;
+    }
+
+
+    public async Task<Result<List<AssetDto>>> SyncAssetsAsync(string accessToken)
     {
         
         // Assets from Fintacharts API
         var apiResult = await GetAssetsFromApiAsync(accessToken);
         if (!apiResult.IsSuccess)
         {
-            return Result<bool>.Failure(apiResult.Error);
+            return Result<List<AssetDto>>.Failure(apiResult.Error);
         }
         var allAssets = apiResult.Value;
 
@@ -105,7 +113,7 @@ public class AssetService: IAssetService
             await _assetRepository.DeleteAsync(obsoleteAsset);
         }
 
-        return Result<bool>.Success(true);
+        return Result<List<AssetDto>>.Success(allAssets);
     }
 
     private async Task SynchronizeAssetAsync(AssetDto assetDto, List<Asset> existingAssets, HashSet<Guid> existingAssetIds)
