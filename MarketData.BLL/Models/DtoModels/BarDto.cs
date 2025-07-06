@@ -1,11 +1,24 @@
-﻿namespace MarketData.BLL.Models.DtoModels;
+﻿using Newtonsoft.Json;
+
+namespace MarketData.BLL.Models.DtoModels;
 
 public class BarDto
 {
+    [JsonProperty("t")]
     public DateTime Time { get; set; }
+
+    [JsonProperty("o")]
     public decimal Open { get; set; }
+
+    [JsonProperty("h")]
     public decimal High { get; set; }
+
+    [JsonProperty("l")]
     public decimal Low { get; set; }
-    public decimal Close { get; set; } 
+
+    [JsonProperty("c")]
+    public decimal Close { get; set; }
+
+    [JsonProperty("v")]
     public decimal Volume { get; set; }
 }
