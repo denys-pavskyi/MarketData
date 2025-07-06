@@ -6,6 +6,8 @@ using System.Net.WebSockets;
 using System.Text.Json;
 using System.Text;
 using System.Threading.Channels;
+using MarketData.BLL.Helpers;
+using Microsoft.Extensions.Configuration;
 
 namespace MarketData.BLL.Services;
 
@@ -14,6 +16,7 @@ public class WebSocketPriceWorker : BackgroundService
     private readonly IPriceCacheService _cache;
     private readonly IAuthService _authService;
     private readonly ILogger<WebSocketPriceWorker> _logger;
+    private readonly IConfiguration _configuration;
 
 
     private ClientWebSocket _ws;
@@ -22,11 +25,12 @@ public class WebSocketPriceWorker : BackgroundService
     public WebSocketPriceWorker(
         IPriceCacheService cache,
         IAuthService authService,
-        ILogger<WebSocketPriceWorker> logger)
+        ILogger<WebSocketPriceWorker> logger, IConfiguration configuration)
     {
         _cache = cache;
         _authService = authService;
         _logger = logger;
+        _configuration = configuration;
     }
 
     public async Task SubscribeAsync(string instrumentId, string provider)
@@ -59,7 +63,9 @@ public class WebSocketPriceWorker : BackgroundService
         var token = (await _authService.GetAccessTokenAsync()).Value;
 
         _ws = new ClientWebSocket();
-        var wsUri = new Uri($"wss://platform.fintacharts.com/api/streaming/ws/v1/realtime?token={token}");
+
+        var baseUri = _configuration["Fintacharts:WebSocketUri"];
+        var wsUri = new Uri($"{baseUri}/api/streaming/ws/v1/realtime?token={token}");
         await _ws.ConnectAsync(wsUri, cancellationToken);
 
         _logger.LogInformation("WebSocket connected.");
@@ -116,19 +122,12 @@ public class WebSocketPriceWorker : BackgroundService
                     var doc = JsonDocument.Parse(json);
                     var root = doc.RootElement;
 
-                    var instrumentId = root.GetProperty("instrumentId").GetString();
-                    var provider = root.GetProperty("provider").GetString();
-                    var last = root.GetProperty("last");
-
-                    var price = new PriceResponseDto
+                    var price = PriceParserHelper.ParsePriceFromWebSocket(root);
+                    if (price != null)
                     {
-                        InstrumentId = instrumentId,
-                        Provider = provider,
-                        Price = last.GetProperty("price").GetDecimal(),
-                        UpdateTime = last.GetProperty("timestamp").GetDateTime()
-                    };
-
-                    _cache.UpdatePrice(price);
+                        _cache.UpdatePrice(price);
+                        _logger.LogInformation($"Parsed price for {price.InstrumentId}: {price.Price} @ {price.UpdateTime}");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -138,6 +137,26 @@ public class WebSocketPriceWorker : BackgroundService
         }
     }
 
+    public async Task UnsubscribeAsync(string instrumentId, string provider)
+    {
+        var msg = new
+        {
+            type = "l1-subscription",
+            id = Guid.NewGuid().ToString(),
+            instrumentId,
+            provider,
+            subscribe = false,
+            kinds = new[] { "ask", "bid", "last" }
+        };
 
+        var json = JsonSerializer.Serialize(msg);
+        var buffer = Encoding.UTF8.GetBytes(json);
+
+        await _ws.SendAsync(buffer, WebSocketMessageType.Text, true, CancellationToken.None);
+
+        _logger.LogInformation($"Unsubscribed from {instrumentId} ({provider})");
+
+        _cache.RemoveSubscription(instrumentId, provider);
+    }
 
 }
