@@ -1,4 +1,6 @@
-﻿namespace MarketData.BLL.Models.Responses;
+﻿using MarketData.BLL.Models.DtoModels;
+
+namespace MarketData.BLL.Models.Responses;
 
 public class PriceResponseDto
 {
@@ -6,5 +8,5 @@ public class PriceResponseDto
     public string Provider { get; set; }
     public decimal? Price { get; set; } 
     public DateTime UpdateTime { get; set; }
-    // public List<BarDto> HistoricalBars { get; set; } // todo 
+    public List<BarDto> HistoricalBars { get; set; } = new();
 }

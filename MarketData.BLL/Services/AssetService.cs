@@ -133,10 +133,7 @@ public class AssetService: IAssetService
         {
             try
             {
-                // 1. Запитуємо воркера підписатись
                 await _wsWorker.SubscribeAsync(req.InstrumentId, req.Provider);
-
-                // 2. Чекаємо оновлення (або одразу з кешу, або з TaskCompletionSource)
                 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
 
                 var price = await _cache.GetOrWaitForPriceAsync(req.InstrumentId, req.Provider, cts.Token);
