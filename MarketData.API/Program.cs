@@ -61,7 +61,7 @@ namespace MarketData.API
             builder.Services.AddSingleton<IPriceCacheService, PriceCacheService>();
             builder.Services.AddSingleton<WebSocketPriceWorker>();
             builder.Services.AddHostedService(provider => provider.GetRequiredService<WebSocketPriceWorker>());
-
+            builder.Services.AddHostedService<AssetSyncBackgroundService>();
 
 
 
