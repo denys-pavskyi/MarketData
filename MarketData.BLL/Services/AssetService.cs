@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using MarketData.BLL.Interfaces;
 using MarketData.BLL.Models.DtoModels;
+using MarketData.BLL.Models.Requests;
 using MarketData.BLL.Models.Responses;
 using MarketData.DAL.Entities;
 using MarketData.DAL.Interfaces;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Headers;
@@ -18,13 +20,20 @@ public class AssetService: IAssetService
     private readonly IAssetRepository _assetRepository;
     private readonly IMapper _mapper;
 
+    private readonly WebSocketPriceWorker _wsWorker;
+    private readonly IPriceCacheService _cache;
+    private readonly ILogger<AssetService> _logger;
 
     public AssetService(IAssetRepository assetRepository, 
         IMapper mapper,
-        IHttpClientFactory httpClientFactory)
+        IHttpClientFactory httpClientFactory, 
+        WebSocketPriceWorker wsWorker, IPriceCacheService cache, ILogger<AssetService> logger)
     {
         _assetRepository = assetRepository;
         _mapper = mapper;
+        _wsWorker = wsWorker;
+        _cache = cache;
+        _logger = logger;
         _httpClient = httpClientFactory.CreateClient("ApiClient");
     }
 
@@ -115,6 +124,55 @@ public class AssetService: IAssetService
 
         return Result<List<AssetDto>>.Success(allAssets);
     }
+
+    public async Task<Result<List<PriceResponseDto>>> GetPricesAsync(List<PriceRequestDto> requests)
+    {
+        var prices = new List<PriceResponseDto>();
+
+        foreach (var req in requests)
+        {
+            try
+            {
+                // 1. Запитуємо воркера підписатись
+                await _wsWorker.SubscribeAsync(req.InstrumentId, req.Provider);
+
+                // 2. Чекаємо оновлення (або одразу з кешу, або з TaskCompletionSource)
+                using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
+                var price = await _cache.GetOrWaitForPriceAsync(req.InstrumentId, req.Provider, cts.Token);
+                prices.Add(price);
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogWarning($"Timeout waiting for price of {req.InstrumentId} ({req.Provider})");
+                prices.Add(new PriceResponseDto
+                {
+                    InstrumentId = req.InstrumentId,
+                    Provider = req.Provider,
+                    Price = null,
+                    UpdateTime = DateTime.UtcNow
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error while getting price for {req.InstrumentId}");
+                prices.Add(new PriceResponseDto
+                {
+                    InstrumentId = req.InstrumentId,
+                    Provider = req.Provider,
+                    Price = null,
+                    UpdateTime = DateTime.UtcNow
+                });
+            }
+
+            await _wsWorker.UnsubscribeAsync(req.InstrumentId, req.Provider);
+        }
+
+
+        return Result<List<PriceResponseDto>>.Success(prices);
+
+    }
+
 
     private async Task SynchronizeAssetAsync(AssetDto assetDto, List<Asset> existingAssets, HashSet<Guid> existingAssetIds)
     {

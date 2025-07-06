@@ -115,7 +115,7 @@ public class WebSocketPriceWorker : BackgroundService
             }
 
             var json = Encoding.UTF8.GetString(buffer, 0, result.Count);
-            if (json.Contains("l1-update"))
+            if (json.Contains("l1-update") || json.Contains("l1-snapshot"))
             {
                 try
                 {

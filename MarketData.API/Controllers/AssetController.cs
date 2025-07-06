@@ -1,5 +1,7 @@
 ﻿using MarketData.BLL.Interfaces;
+using MarketData.BLL.Models.Requests;
 using MarketData.BLL.Models.Responses;
+using MarketData.BLL.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +51,18 @@ namespace MarketData.API.Controllers
                 Ok,
                 error => error.ToActionResult());
 
+        }
+
+
+        [HttpPost("prices")]
+        public async Task<ActionResult<List<PriceResponseDto>>> GetPrices([FromBody] List<PriceRequestDto> requests)
+        {
+            var result = await _assetService.GetPricesAsync(requests);
+            
+            
+            return result.Match(
+                Ok,
+                error => error.ToActionResult());
         }
 
 
