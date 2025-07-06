@@ -56,6 +56,7 @@ namespace MarketData.API
             // Services
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddScoped<IAssetService, AssetService>();
+            builder.Services.AddSingleton<IPriceCacheService, PriceCacheService>();
 
 
             var app = builder.Build();
