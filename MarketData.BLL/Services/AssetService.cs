@@ -8,9 +8,14 @@ using MarketData.DAL.Interfaces;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime;
 using System.Text.Json;
+using System.Threading;
+using System.Web;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json.Linq;
 
 namespace MarketData.BLL.Services;
 
@@ -23,17 +28,22 @@ public class AssetService: IAssetService
     private readonly WebSocketPriceWorker _wsWorker;
     private readonly IPriceCacheService _cache;
     private readonly ILogger<AssetService> _logger;
+    private readonly IAuthService _authService;
+    private readonly IConfiguration _configuration;
 
     public AssetService(IAssetRepository assetRepository, 
         IMapper mapper,
         IHttpClientFactory httpClientFactory, 
-        WebSocketPriceWorker wsWorker, IPriceCacheService cache, ILogger<AssetService> logger)
+        WebSocketPriceWorker wsWorker, IPriceCacheService cache, ILogger<AssetService> logger, 
+        IAuthService authService, IConfiguration configuration)
     {
         _assetRepository = assetRepository;
         _mapper = mapper;
         _wsWorker = wsWorker;
         _cache = cache;
         _logger = logger;
+        _authService = authService;
+        _configuration = configuration;
         _httpClient = httpClientFactory.CreateClient("ApiClient");
     }
 
@@ -128,6 +138,9 @@ public class AssetService: IAssetService
     public async Task<Result<List<PriceResponseDto>>> GetPricesAsync(List<PriceRequestDto> requests)
     {
         var prices = new List<PriceResponseDto>();
+        var accessToken = (await _authService.GetAccessTokenAsync()).Value!;
+
+        // Actual data
 
         foreach (var req in requests)
         {
@@ -166,8 +179,63 @@ public class AssetService: IAssetService
         }
 
 
+        // Historic data
+
+        foreach (var price in prices.Where(p => p.Price != null))
+        {
+            var req = requests.FirstOrDefault(r =>
+                r.InstrumentId == price.InstrumentId &&
+                r.Provider == price.Provider);
+
+            if (req == null) continue;
+
+            try
+            {
+                var bars = await GetHistoricalBarsAsync(req, accessToken);
+                price.HistoricalBars = bars;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error while fetching historical bars for {price.InstrumentId}");
+                price.HistoricalBars = new List<BarDto>();
+            }
+        }
+
         return Result<List<PriceResponseDto>>.Success(prices);
 
+    }
+
+    private async Task<List<BarDto>> GetHistoricalBarsAsync(PriceRequestDto request, string accessToken)
+    {
+
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+
+        var baseUri = _configuration["Fintacharts:WebSocketUri"];
+        var uriBuilder = new UriBuilder($"{baseUri}/api/bars/v1/bars/count-back");
+        var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+
+        query["instrumentId"] = request.InstrumentId;
+        query["provider"] = request.Provider;
+        query["interval"] = request.Interval.ToString();
+        query["periodicity"] = request.Periodicity;
+        query["barsCount"] = request.BarsCount.ToString();
+
+        uriBuilder.Query = query.ToString();
+
+        var response = await _httpClient.GetAsync(uriBuilder.Uri);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.LogWarning($"Failed to fetch historical bars: {response.StatusCode}");
+            return new List<BarDto>();
+        }
+
+        var content = await response.Content.ReadAsStringAsync();
+        var json = JObject.Parse(content);
+        var bars = json["data"]?.ToObject<List<BarDto>>() ?? new();
+
+        return bars;
     }
 
 
