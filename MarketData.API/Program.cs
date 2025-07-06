@@ -56,7 +56,14 @@ namespace MarketData.API
             // Services
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddScoped<IAssetService, AssetService>();
+            builder.Services.AddScoped<IWebSocketPriceService, WebSocketPriceService>();
+
+            // Other
             builder.Services.AddSingleton<IPriceCacheService, PriceCacheService>();
+            builder.Services.AddSingleton<WebSocketPriceWorker>();
+            builder.Services.AddHostedService(provider => provider.GetRequiredService<WebSocketPriceWorker>());
+
+
 
 
             var app = builder.Build();
