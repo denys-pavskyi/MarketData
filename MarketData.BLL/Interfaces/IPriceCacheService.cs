@@ -9,4 +9,6 @@ public interface IPriceCacheService
     bool IsSubscribed(string instrumentId, string provider);
     void RegisterSubscription(string instrumentId, string provider);
     IEnumerable<(string instrumentId, string provider)> GetAllSubscribed();
+
+    void RemoveSubscription(string instrumentId, string provider);
 }

@@ -1,5 +1,6 @@
 ﻿using MarketData.BLL.Interfaces;
 using MarketData.BLL.Models.Responses;
+using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 
 namespace MarketData.BLL.Services;
@@ -9,6 +10,13 @@ public class PriceCacheService: IPriceCacheService
     private readonly ConcurrentDictionary<(string instrumentId, string provider), PriceResponseDto> _prices = new();
     private readonly ConcurrentDictionary<(string instrumentId, string provider), TaskCompletionSource<PriceResponseDto>> _waiting = new();
     private readonly ConcurrentDictionary<(string instrumentId, string provider), byte> _subscriptions = new();
+
+    private readonly ILogger<IPriceCacheService> _logger;
+
+    public PriceCacheService(ILogger<IPriceCacheService> logger)
+    {
+        _logger = logger;
+    }
 
     public Task<PriceResponseDto> GetOrWaitForPriceAsync(string instrumentId, string provider, CancellationToken cancellationToken = default)
     {
@@ -21,7 +29,7 @@ public class PriceCacheService: IPriceCacheService
 
         if (_waiting.TryAdd(key, tcs))
         {
-            // new sub
+            _logger.LogInformation($"Waiting for price of {instrumentId} ({provider})");
         }
 
         cancellationToken.Register(() => tcs.TrySetCanceled());
@@ -55,6 +63,11 @@ public class PriceCacheService: IPriceCacheService
         return _subscriptions.Keys;
     }
 
-
+    public void RemoveSubscription(string instrumentId, string provider)
+    {
+        _subscriptions.TryRemove((instrumentId, provider), out _);
+        _waiting.TryRemove((instrumentId, provider), out _);
+        _prices.TryRemove((instrumentId, provider), out _);
+    }
 
 }
