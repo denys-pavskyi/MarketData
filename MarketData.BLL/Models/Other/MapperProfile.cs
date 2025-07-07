@@ -15,7 +15,5 @@ public class MapperProfile: Profile
         CreateMap<AssetMappingDto, AssetMapping>()
             .ReverseMap();
 
-
-
     }
 }

@@ -1,5 +1,4 @@
 ﻿using MarketData.DAL.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace MarketData.DAL.Interfaces;
 

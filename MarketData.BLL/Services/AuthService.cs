@@ -4,7 +4,6 @@ using MarketData.BLL.Models.Other;
 using MarketData.BLL.Models.Responses;
 using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
-using System.Net.Http;
 
 namespace MarketData.BLL.Services;
 
@@ -93,7 +92,6 @@ public class AuthService: IAuthService
 
         return Result.Success();
     }
-
 
     private async Task<Result> RefreshAccessTokenAsync()
     {

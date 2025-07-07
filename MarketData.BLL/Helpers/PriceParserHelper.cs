@@ -19,8 +19,6 @@ public static class PriceParserHelper
             _ => null
         };
     }
-
-
     private static PriceResponseDto? ParseSimulation(JsonElement root)
     {
         if (!root.TryGetProperty("instrumentId", out var id) ||

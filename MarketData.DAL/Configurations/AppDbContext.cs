@@ -5,7 +5,6 @@ namespace MarketData.DAL.Configurations;
 
 public class AppDbContext : DbContext
 {
-
     public DbSet<Asset> Assets { get; set; }
     public DbSet<AssetMapping> AssetMappings { get; set; }
 

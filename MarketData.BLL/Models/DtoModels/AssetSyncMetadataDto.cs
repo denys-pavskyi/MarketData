@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace MarketData.BLL.Models.DtoModels;
 
 public class AssetSyncMetadataDto

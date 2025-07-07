@@ -1,6 +1,4 @@
-﻿using MarketData.DAL.Entities;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace MarketData.BLL.Models.DtoModels;
 

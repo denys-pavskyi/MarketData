@@ -6,13 +6,9 @@ using MarketData.BLL.Models.Responses;
 using MarketData.DAL.Entities;
 using MarketData.DAL.Interfaces;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Runtime;
 using System.Text.Json;
-using System.Threading;
 using System.Web;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
@@ -106,7 +102,6 @@ public class AssetService: IAssetService
 
     public async Task<Result<List<AssetDto>>> SyncAssetsAsync(string accessToken)
     {
-        
         // Assets from Fintacharts API
         var apiResult = await GetAssetsFromApiAsync(accessToken);
         if (!apiResult.IsSuccess)
@@ -210,7 +205,6 @@ public class AssetService: IAssetService
 
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-
         var baseUri = _configuration["Fintacharts:WebSocketUri"];
         var uriBuilder = new UriBuilder($"{baseUri}/api/bars/v1/bars/count-back");
         var query = HttpUtility.ParseQueryString(uriBuilder.Query);
@@ -237,7 +231,6 @@ public class AssetService: IAssetService
 
         return bars;
     }
-
 
     private async Task SynchronizeAssetAsync(AssetDto assetDto, List<Asset> existingAssets, HashSet<Guid> existingAssetIds)
     {
@@ -280,7 +273,6 @@ public class AssetService: IAssetService
         }
     }
 
-
     private async Task<Result<PagedResponseDto<AssetDto>>> GetPageAsync(string uri)
     {
         var response = await _httpClient.GetAsync(uri);
@@ -311,6 +303,5 @@ public class AssetService: IAssetService
             })
             : Result<PagedResponseDto<AssetDto>>.Success(result);
     }
-
 
 }

@@ -1,9 +1,6 @@
 ﻿using MarketData.BLL.Interfaces;
 using MarketData.BLL.Models.Requests;
 using MarketData.BLL.Models.Responses;
-using MarketData.BLL.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MarketData.API.Controllers
@@ -22,7 +19,6 @@ namespace MarketData.API.Controllers
             _assetService = assetService;
         }
 
-
         [HttpGet("")]
         public async Task<IActionResult> GetAssets()
         {
@@ -33,7 +29,6 @@ namespace MarketData.API.Controllers
             {
                 return Ok(assets);
             }
-
 
             // Assets was not found in db, syncing them from API
             var tokenResult = await _authService.GetAccessTokenAsync();
@@ -53,7 +48,6 @@ namespace MarketData.API.Controllers
 
         }
 
-
         [HttpPost("prices")]
         public async Task<ActionResult<List<PriceResponseDto>>> GetPrices([FromBody] List<PriceRequestDto> requests)
         {
@@ -64,8 +58,6 @@ namespace MarketData.API.Controllers
                 Ok,
                 error => error.ToActionResult());
         }
-
-
 
         //[HttpPost("sync")]
         //public async Task<IActionResult> SyncAssets()
@@ -86,7 +78,5 @@ namespace MarketData.API.Controllers
         //        error => error.ToActionResult());
 
         //}
-
-
     }
 }

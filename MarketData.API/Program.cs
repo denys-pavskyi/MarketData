@@ -7,7 +7,7 @@ using MarketData.DAL.Configurations;
 using MarketData.DAL.Interfaces;
 using MarketData.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+
 
 namespace MarketData.API
 {
@@ -62,8 +62,6 @@ namespace MarketData.API
             builder.Services.AddSingleton<WebSocketPriceWorker>();
             builder.Services.AddHostedService(provider => provider.GetRequiredService<WebSocketPriceWorker>());
             builder.Services.AddHostedService<AssetSyncBackgroundService>();
-
-
 
             var app = builder.Build();
 

@@ -1,5 +1,4 @@
 ﻿using MarketData.BLL.Interfaces;
-using MarketData.BLL.Models.Responses;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Net.WebSockets;
@@ -17,7 +16,6 @@ public class WebSocketPriceWorker : BackgroundService
     private readonly IAuthService _authService;
     private readonly ILogger<WebSocketPriceWorker> _logger;
     private readonly IConfiguration _configuration;
-
 
     private ClientWebSocket _ws;
     private readonly Channel<(string instrumentId, string provider)> _subscriptionQueue = Channel.CreateUnbounded<(string, string)>();
